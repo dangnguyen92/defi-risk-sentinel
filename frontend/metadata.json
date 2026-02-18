@@ -1,0 +1,5 @@
+{
+  "name": "DeFi Risk Sentinel",
+  "description": "A strict DeFi risk assessment tool that analyzes campaign URLs and terms to provide a safety verdict based on financial logic.",
+  "requestFramePermissions": []
+}
