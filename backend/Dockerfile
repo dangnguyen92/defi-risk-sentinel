@@ -1,3 +1,13 @@
+# Stage 1: Build
+FROM node:20-slim AS builder
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npx tsc
+
+# Stage 2: Production
 FROM node:20-slim
 
 RUN apt-get update && apt-get install -y \
@@ -13,8 +23,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev
-COPY . .
-RUN npx tsc
+COPY --from=builder /app/dist ./dist
 
 EXPOSE 8000
 CMD ["node", "dist/server.js"]
