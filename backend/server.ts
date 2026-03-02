@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import rateLimit from "express-rate-limit";
 import Anthropic from "@anthropic-ai/sdk";
 import puppeteer, { Browser } from "puppeteer";
 
@@ -8,10 +9,13 @@ const app = express();
 const PORT = Number(process.env.PORT) || 8000;
 
 // Middleware
+const ALLOWED_ORIGINS = [
+  /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/,
+  /^https:\/\/(www\.)?duyquang06\.xyz$/,
+];
 app.use(cors({
   origin(origin, callback) {
-    // Allow requests from any localhost port (dev) or no origin (e.g. curl)
-    if (!origin || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+    if (!origin || ALLOWED_ORIGINS.some((re) => re.test(origin))) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -19,6 +23,13 @@ app.use(cors({
   },
 }));
 app.use(express.json());
+
+const analyzeLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour limit
+  max: 20, // 20 requests per hour
+  message: { error: "Too many requests. Please try again later." },
+});
+app.use("/api/analyze", analyzeLimiter);
 
 // --- Anthropic Client ---
 const anthropic = new Anthropic({
