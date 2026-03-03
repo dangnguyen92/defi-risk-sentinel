@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { UrlInputList } from './components/UrlInputList';
+import { UrlInputList, isValidUrl } from './components/UrlInputList';
 import { analyzeRisk } from './services/geminiService';
 import { AnalysisStatus, BilingualAnalysisResult } from './types';
 import { useLanguage, Language } from './LanguageContext';
@@ -97,12 +97,18 @@ const App: React.FC = () => {
       return;
     }
 
+    const validTermUrls = termUrls.filter(u => u.trim() !== '');
+    const allUrls = [...validCampaignUrls, ...validTermUrls];
+    if (allUrls.some(u => !isValidUrl(u))) {
+      setError(t.errorInvalidUrl);
+      return;
+    }
+
     setStatus(AnalysisStatus.LOADING);
     setError(null);
     setBilingualResult(null);
 
     try {
-      const validTermUrls = termUrls.filter(u => u.trim() !== '');
       const data = await analyzeRisk(validCampaignUrls, validTermUrls, notes, model);
       setBilingualResult(data);
       setStatus(AnalysisStatus.SUCCESS);
@@ -259,6 +265,7 @@ const App: React.FC = () => {
                 addUrlLabel={t.addUrl}
                 removeUrlLabel={t.removeUrl}
                 emptyLabel={t.emptyUrl}
+                invalidUrlLabel={t.invalidUrlLabel}
               />
 
               <UrlInputList 
@@ -268,6 +275,7 @@ const App: React.FC = () => {
                 addUrlLabel={t.addUrl}
                 removeUrlLabel={t.removeUrl}
                 emptyLabel={t.emptyUrl}
+                invalidUrlLabel={t.invalidUrlLabel}
               />
 
               <div className="mb-4 sm:mb-6">
