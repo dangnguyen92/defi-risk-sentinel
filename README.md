@@ -64,16 +64,24 @@ bash start.sh
 ## Project Structure
 
 ```
-defi-risk-sentinel-v1.2/
-├── frontend/          # React app (Vite)
-│   ├── App.tsx        # Main UI component
-│   ├── LanguageContext.tsx  # i18n (Vietnamese / English)
-│   ├── components/    # Reusable components
-│   ├── services/      # API client
-│   └── public/fonts/  # Roboto font for PDF export
-├── backend/           # Express API server
-│   ├── server.ts      # API routes + AI integration
-│   ├── .env           # Your API key (not committed)
-│   └── .env.example   # Template
-└── start.sh           # One-command startup script
+defi-risk-sentinel/
+├── frontend/                # React app (Vite)
+│   ├── index.html           # Entry HTML with Tailwind CDN + importmap
+│   ├── index.tsx            # React root mount
+│   ├── App.tsx              # Main UI component
+│   ├── types.ts             # Shared TypeScript interfaces
+│   ├── LanguageContext.tsx   # i18n (Vietnamese / English)
+│   ├── components/
+│   │   └── UrlInputList.tsx # URL Input with validation
+│   └── services/
+│       └── geminiService.ts # API client (calls backend)
+├── backend/                 # Express API server
+│   ├── server.ts            # API routes, Puppeteer scraping, Claude AI
+│   ├── Dockerfile           # Production Docker image (Node + Chromium)
+│   ├── .dockerignore        # Files excluded from Docker build
+│   ├── .env                 # Your API key (not committed)
+│   └── .env.example         # Template
+├── start.sh                 # One-command startup script
+├── DEPLOYMENT_PLAN.md       # Full deployment guide (Render + Cloudflare)
+└── .gitignore
 ```
