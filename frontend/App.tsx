@@ -8,11 +8,13 @@ import remarkGfm from 'remark-gfm';
 import { FileText, Trash, ShieldCheck, Download, AlertTriangle, Loader2, Info, Calendar, Coins, TrendingUp, Ban, ChevronDown, Globe } from 'lucide-react';
 import jsPDF from 'jspdf';
 
-// Helper to safely extract text from React children
 const getText = (children: React.ReactNode): string => {
   if (typeof children === 'string') return children;
-  if (Array.isArray(children)) return children.map(getText).join('');
   if (typeof children === 'number') return String(children);
+  if (Array.isArray(children)) return children.map(getText).join('');
+  if (React.isValidElement(children)) {
+    return getText((children.props as { children?: React.ReactNode }).children);
+  }
   return '';
 };
 
