@@ -2,7 +2,7 @@
 
 _QA by Dang Nguyen. Ideas by Duy Quang_
 
-Automated DeFi risk assessment tool powered by Claude AI. Enter campaign URLs and the system will scrape page content, analyze terms & conditions, and generate a rigorous risk report with Red/Yellow/Green flag ratings.
+Automated DeFi risk assessment tool. Enter campaign URLs and the system will scrape page content, analyze terms & conditions, and generate a rigorous risk report with Red/Yellow/Green flag ratings.
 
 ## Features
 
